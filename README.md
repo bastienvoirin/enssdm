@@ -1,0 +1,1 @@
+Pour utiliser ce package dans un document LaTeX, placer le fichier `enssdm.sty` dans le même dossier que ce document puis l'importer avec la commande `\usepackage{enssdm}` (les options disponibles sont présentées dans le document `enssdm.pdf`).

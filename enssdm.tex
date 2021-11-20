@@ -1,0 +1,506 @@
+\documentclass{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage[fr,code,showframes,longto,longmapsto,noindent,widehat]{enssdm}
+
+\title{Package \raw{enssdm}}
+\author{Bastien Voirin}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+    Le package \raw{enssdm} rassemble des packages et définit des commandes utiles en Sciences de la Matière et plus généralement en Sciences Exactes et Expérimentales : mise en page, notations scientifiques, symboles, environnements, écriture de codes sources et d'algorithmes...
+\end{abstract}
+
+\tableofcontents
+
+\clearpage
+\section{Options disponibles}
+
+\begin{xltabular}[l]{0.825\textwidth}{@{} lX @{}}
+\raw{fr} & Définit le français comme langue principale du document. Affecte aussi certaines notations mathématiques : vecteurs $\vec{v}$, produit vectoriel $\vec{A}\wedge\vec{B}$...\\\\
+\raw{en} & Définit l'anglais comme langue principale du document. Affecte aussi certaines notations mathématiques : vecteurs $\mathbf{v}$, produit vectoriel $\mathbf{A}\cross\mathbf{B}$...\\\\
+\raw{code} & Importe des packages et définit des commandes utiles pour afficher du code source et écrire des algorithmes dans le document.\\\\
+\raw{showframes} & Options de débogage qui dessine des cadres autour de certaines boîtes pour rendre visible l'espacement, la disposition et l'alignement de ces boîtes.\\\\
+\raw{widehat} & Change la commande \raw{\hat} ($\,\oldhat{\:}\,$ par défaut) en $\,\widehat{\:}\,$. La première variante est toujours accessible grâce à la commande \raw{\oldhat}.\\\\
+\raw{longto} & Change la commande \raw{\to} ($\oldto$ par défaut) en $\longrightarrow$. La première variante est toujours accessible grâce à la commande \raw{\oldto}.\\\\
+\raw{longmapsto} & Change la commande \raw{\mapsto} ($\oldmapsto$ par défaut) en $\longmapsto$.  La première variante est toujours accessible grâce à la commande \raw{\oldmapsto}.
+\end{xltabular}
+
+\section{Packages disponibles}
+
+Liste non exhaustive des packages importés par \raw{enssdm} :
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ll}
+        \href{https://www.ctan.org/pkg/adjustbox}{\raw{adjustbox}} & <<~\emph{Graphics package-alike macros for ``general'' boxes}~>>\\
+        \href{https://www.ctan.org/pkg/amsfonts}{\raw{amsfonts}} & <<~\emph{{\normalfont\TeX} fonts from the American Mathematical Society}~>>\\
+        \href{https://www.ctan.org/pkg/amsmath}{\raw{amsmath}} & <<~\emph{AMS Mathematical facilities for {\normalfont\LaTeX}}~>>\\
+        \raw{amssymb} & \\
+        \href{https://www.ctan.org/pkg/booktabs}{\raw{booktabs}} & <<~\emph{Publication quality tables in {\normalfont\LaTeX}}~>>\\
+        \href{https://www.ctan.org/pkg/enumitem}{\raw{enumitem}} & <<~\emph{Control layout of itemize, enumerate, description}~>>\\
+        \href{https://www.ctan.org/pkg/esint}{\raw{esint}} & <<~\emph{Extented set of integrals for Computer Modern}~>>\\
+        \href{https://www.ctan.org/pkg/esvect}{\raw{esvect}} & <<~\emph{Vector arrows}~>>\\
+        \href{https://www.ctan.org/pkg/float}{\raw{float}} & <<~\emph{Improved interface for floating objects}~>>\\
+        \href{https://www.ctan.org/pkg/mathtools}{\raw{mathtools}} & <<~\emph{Mathematical tools to use width {\normalfont\raw{amsmath}}}~>>\\
+        \href{https://www.ctan.org/pkg/mhchem}{\raw{mhchem}} & <<~\emph{Typeset chemical formulae/equations and Risk and Safety phrases}~>>\\
+        \href{https://www.ctan.org/pkg/nicematrix}{\raw{nicematrix}} & <<~\emph{Improve the typesetting of mathematical matrices with \textsc{pgf}}~>>\\
+        \href{https://www.ctan.org/pkg/pgf}{\raw{pgf} (et TikZ)} & <<~\emph{Create PostScript and PDF graphics in {\normalfont\TeX}}~>>\\
+        \href{https://www.ctan.org/pkg/physics}{\raw{physics}} & <<~\emph{Macros supporting the Mathematics of Physics}~>>\\
+        \href{https://www.ctan.org/pkg/siunitx}{\raw{siunitx}} & <<~\emph{A comprehensive (SI) units package}~>>
+    \end{tabular}
+\end{table}
+
+\clearpage
+\section{Mise en page}
+
+\subsection{Listes, tableaux, environnements}
+
+\subsubsection{Listes non numérotées}
+
+Le package \raw{enssdm} contient le code suivant, qui peut être écrasé (copié-collé puis modifié) dans le document \LaTeX :
+
+\begin{minted}{latex}
+\setlist[itemize,1]{label={\textbullet}}
+\setlist[itemize,2]{label={\normalfont\bfseries\textendash}}
+\setlist[itemize,3]{label={\textasteriskcentered}}
+\setlist[itemize,4]{label={\textperiodcentered}}
+\end{minted}
+
+Ce code produit le résultat suivant :
+
+\begin{itemize}
+    \item Liste de niveau 1
+    \begin{itemize}
+        \item Liste de niveau 2
+        \begin{itemize}
+            \item Liste de niveau 3
+            \begin{itemize}
+                \item Liste de niveau 4
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+En écrivant
+
+\begin{minted}{latex}
+\begin{itemize}
+    \item Liste de niveau 1
+    \begin{itemize}
+        \item Liste de niveau 2
+        \begin{itemize}
+            \item Liste de niveau 3
+            \begin{itemize}
+                \item Liste de niveau 4
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+\end{minted}
+
+\subsubsection{Listes numérotées}
+
+\begin{enumerate}
+    \item Liste de niveau 1
+    \begin{enumerate}
+        \item Liste de niveau 2
+        \begin{enumerate}
+            \item Liste de niveau 3
+            \begin{enumerate}
+                \item Liste de niveau 4
+            \end{enumerate}
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
+
+\begin{minted}{latex}
+\begin{enumerate}
+    \item Liste de niveau 1
+    \begin{enumerate}
+        \item Liste de niveau 2
+        \begin{enumerate}
+            \item Liste de niveau 3
+            \begin{enumerate}
+                \item Liste de niveau 4
+            \end{enumerate}
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
+\end{minted}
+
+\clearpage
+\subsubsection{Double colonne}
+
+Colonnes alignées en haut :
+
+\twocol{
+    \begin{align}
+        \SwapAboveDisplaySkip
+        E &= mc^2
+    \end{align}
+}{
+    \begin{align}
+        \SwapAboveDisplaySkip
+        i^2 &= -1\\
+        j^2 &= -1\\
+        k^2 &= -1
+    \end{align}
+}
+
+\begin{minted}{latex}
+\twocol{
+    % colonne de gauche
+}{
+    % colonne de droite
+}
+\end{minted}
+
+\begin{minted}{latex}
+\twocol[t]{
+    % colonne de gauche
+}{
+    % colonne de droite
+}
+\end{minted}
+
+Colonnes alignées au centre :
+
+\twocol[c]{
+    \begin{align}
+        \SwapAboveDisplaySkip
+        E &= mc^2
+    \end{align}
+}{
+    \begin{align}
+        \SwapAboveDisplaySkip
+        i^2 &= -1\\
+        j^2 &= -1\\
+        k^2 &= -1
+    \end{align}
+}
+
+\begin{minted}{latex}
+\twocol[c]{
+    % colonne de gauche
+}{
+    % colonne de droite
+}
+\end{minted}
+
+Colonnes alignées en bas :
+
+\twocol[b]{
+    \begin{align}
+        \SwapAboveDisplaySkip
+        E &= mc^2
+    \end{align}
+}{
+    \begin{align}
+        \SwapAboveDisplaySkip
+        i^2 &= -1\\
+        j^2 &= -1\\
+        k^2 &= -1
+    \end{align}
+}
+
+\begin{minted}{latex}
+\twocol[b]{
+    % colonne de gauche
+}{
+    % colonne de droite
+}
+\end{minted}
+
+\clearpage
+\section{Sciences}
+
+\subsection{Notations, symboles et constantes}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ll ll ll}
+    $\argmax$ & \raw{\argmax} &&& $\Argmax$ & \raw{\Argmax}\\
+    $\argmin$ & \raw{\argmin} &&& $\Argmin$ & \raw{\Argmin}\\
+    $\img$ & \raw{\img} &&& $\Img$ & \raw{\Img}\\
+    $\kr$ & \raw{\kr} &&& $\Kr$ & \raw{\Kr}\\
+    $\mat$ & \raw{\mat} &&& $\Mat$ & \raw{\Mat}\\
+    $\per$ & \raw{\per} &&& $\Per$ & \raw{\Per}\\
+    $\perm$ & \raw{\perm} &&& $\Perm$ & \raw{\Perm}\\
+    $\rg$ & \raw{\rg} &&& $\Rg$ & \raw{\Rg}\\
+    $\rk$ & \raw{\rk} &&& $\Rk$ & \raw{\Rk}\\
+    $\spc$ & \raw{\spc} &&& $\Spc$ & \raw{\Spc}\\
+    $\spn$ & \raw{\spn} &&& $\Spn$ & \raw{\Spn}\\
+    $\vect$ & \raw{\vect} &&& $\Vect$ & \raw{\Vect}\\
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{llll}
+    Nom(s) & Résultat & \multicolumn{2}{c}{Commande}\\
+    \toprule
+    Permittivité du vide & $\epz$ & \raw{\epz}\\
+    Perméabilité du vide & $\muz$ & \raw{\muz}\\
+    Constante d'Avogadro & $\na$ & \raw{\na}\\
+    Magnéton de Bohr & $\mub$ & \raw{\mub}\\
+    Constante de Boltzmann & $\kb$ & \raw{\kb}\\
+    & $\kbt$ & \raw{\kbt}\\
+    Zéro absolu & $\ok$ & \raw{\ok}\\
+    <<~de Fermi~>> & $\placeholder\fermi$ & \raw{\fermi}\\
+    Exponentielle & $\e{x}$ & \raw{\e{x}} & \raw{\e x}\\
+    & $\eiwt$ & \raw{\eiwt}\\
+    & $\emiwt$ & \raw{\emiwt}\\
+    Champ électrique & $\E$ & \raw{\E}\\
+    Champ électrique & $\E[x]$ & \raw{\E[x]}\\
+    Champ magnétique & $\B$ & \raw{\B}\\
+    Champ magnétique & $\B[x]$ & \raw{\B[x]}\\
+    Gradient & $\grd$ & \raw{\grd}\\
+    Divergence & $\div$ & \raw{\div}\\
+    Rotationnel & $\rot$ & \raw{\rot}\\
+    Rotationnel (anglais) & $\crl$ & \raw{\crl}\\
+    Gradient & $\grad{}$ & \raw{\grad}\\
+    Divergence & $\divg{}$ & \raw{\divg}\\
+    Rotationnel & $\rota{}$ & \raw{\rota}\\
+    Rotationnel (anglais) & $\curl{}$ & \raw{\curl}\\
+    Espace vectoriel de matrices & $\matn{n}$ & \raw{\matn{n}} & \raw{\matn n}\\
+    Espace vectoriel de matrices & $\matn[\C]{n}$ & \raw{\matn[\C]{n}} & \raw{\matn\C n}\\
+    Espace vectoriel de matrices & $\matnm{n}{m}$ & \raw{\matnm{n}{m}} & \raw{\matnm nm}\\
+    Espace vectoriel de matrices & $\matnm[\C]{n}{m}$ & \raw{\matnm[\C]{n}{m}} & \raw{\matnm\C nm}\\
+    Identité & $\1$ & \raw{\1}\\
+    Identité & $\1[n \times n]$ & \raw{\1[n \times n]}\\
+    Identité & $\id$ & \raw{\id}\\
+    Identité & $\id[n \times n]$ & \raw{\id[n \times n]}\\
+    Identité & $\Id$ & \raw{\Id}\\
+    Identité & $\Id[n \times n]$ & \raw{\Id[n \times n]}
+    \end{tabular}
+\end{table}
+
+\clearpage
+\subsection{Tenseurs et géométrie}
+
+\begin{center}
+    \begin{tabular}{lll}
+        $\qv x$ & \raw{\qv{x}} & \raw{\qv x}\\
+        $\ts\Lambda\mu\nu$ & \raw{\ts{\Lambda}{\mu}{\nu}} & \raw{\ts\Lambda\mu\nu}
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{lc}
+        \raw{\minkp} & $\minkp$\\\\
+        \raw{\minkp} & $\minkn$\\\\
+        \raw{\lorentzx} & $\lorentzx$\\\\
+        \raw{\lorentzy} & $\lorentzy$\\\\
+        \raw{\lorentzz} & $\lorentzz$\\\\
+        \raw{\lorentzr} & $\lorentzr$
+    \end{tabular}
+\end{center}
+
+\subsection{Équations et fragments d'équations}
+
+Les commandes (définies dans cette partie) commençant par \raw{\a} sont des variantes <<~alignées~>>, et doivent être utilisées dans un environnement \raw{align}, \raw{align*} ou \raw{aligned}. L'ancre d'alignement (\raw{&}) se situe juste avant le signe~\raw{=}.
+
+\begin{adjustbox}{center}
+    \centering
+    {\renewcommand{\arraystretch}{2.4}\begin{tabular}{m{6cm}lp{3cm}}
+        \multicolumn{1}{c}{Nom(s)} & \multicolumn{1}{c}{Résultat} & \multicolumn{1}{c}{Commande(s)}\\
+        \toprule
+        Équation de Schrödinger & $\eqschr$ & \raw{\eqschr}\linebreak\raw{\aeqschr}\\
+        Équation de Schrödinger indépendante du temps & $\eqschrind{\psi}$ & \raw{\eqschrind{\psi}}\linebreak\raw{\aeqschrind{\psi}}\\
+        Équation de Schrödinger indépendante du temps & $\eqschrind[n]{\psi}$ & \raw{\eqschrind[n]{\psi}}\linebreak\raw{\aeqschrind[n]{\psi}}\\
+        Transformée de Fourier (en fréquence) & $\exprtf$ & \raw{\exprtf}\\
+        Transformée de Fourier (en fréquence) & $\exprtf[g]$ & \raw{\exprtf[g]}\\
+        Transformée de Fourier (en fréquence) & $\exprtu$ & \raw{\exprtu}\\
+        Transformée de Fourier (en fréquence) & $\exprtu[g]$ & \raw{\exprtu[g]}\\
+        Transformée de Fourier (en pulsation) & $\exprtw$ & \raw{\exprtw}\\
+        Transformée de Fourier (en pulsation) & $\exprtw[g]$ & \raw{\exprtw[g]}\\
+        Transformée de Fourier inverse (en\linebreak fréquence) & $\exprtfi$ & \raw{\exprtfi}\\
+        Transformée de Fourier inverse (en\linebreak fréquence) & $\exprtfi[\hat{g}]$ & \raw{\exprtfi[\hat{g}]}\\
+        Transformée de Fourier inverse (en\linebreak fréquence) & $\exprtui$ & \raw{\exprtui}\\
+        Transformée de Fourier inverse (en\linebreak fréquence) & $\exprtui[\hat{g}]$ & \raw{\exprtui[\hat{g}]}\\
+        Transformée de Fourier inverse (en\linebreak pulsation) & $\exprtwi$ & \raw{\exprtwi}\\
+        Transformée de Fourier inverse (en\linebreak pulsation) & $\exprtwi[\hat{g}]$ & \raw{\exprtwi[\hat{g}]}\\
+    \end{tabular}}
+\end{adjustbox}
+
+\begin{adjustbox}{center}
+    \centering
+    {\renewcommand{\arraystretch}{2.4}\begin{tabular}{m{6.5cm}lp{3cm}}
+        \multicolumn{1}{c}{Nom(s)} & \multicolumn{1}{c}{Résultat} & \multicolumn{1}{c}{Commande(s)}\\
+        \toprule
+        Équation d'Euler-Lagrange & $\eqeula$ & \raw{\eqeula}\linebreak\raw{\aeqeula}\\
+        Équation d'Euler-Lagrange & $\eqeula[x_i]$ & \raw{\eqeula[x_i]}\linebreak\raw{\aeqeula[x_i]}\\
+        Équation de Maxwell-Ampère (locale) & $\eqma$ & \raw{\eqma}\linebreak\raw{\aeqma}\\
+        Équation de Maxwell-Faraday (locale) & $\eqmf$ & \raw{\eqmf}\linebreak\raw{\aeqmf}\\
+        Équation de Maxwell-Gauss (locale) & $\eqmg$ & \raw{\eqmg}\linebreak\raw{\aeqmg}\\
+        \raggedright Équation de Maxwell-Thomson (locale)\linebreak Équation de Maxwell-flux (locale) & $\eqmt$ & \raw{\eqmt}\linebreak\raw{\aeqmt}\\
+        Équation de Maxwell-Ampère (intégrale) & $\eqmai$ & \raw{\eqmai}\linebreak\raw{\aeqmai}\\
+        Équation de Maxwell-Faraday (intégrale) & $\eqmfi$ & \raw{\eqmfi}\linebreak\raw{\aeqmfi}\\
+        Équation de Maxwell-Gauss (intégrale) & $\eqmgi$ & \raw{\eqmgi}\linebreak\raw{\aeqmgi}\\
+        Équation de Maxwell-Thomson (intégrale) & $\eqmti$ & \raw{\eqmti}\linebreak\raw{\aeqmti}\\
+        Définition du vecteur de Poynting & $\defpoy$ & \raw{\defpoy}\linebreak\raw{\adefpoy}\\
+        Théorème de Poynting & $\thmpoy$ & \raw{\thmpoy}\linebreak\raw{\athmpoy}\\
+        Équation de conservation & $\eqcons$ & \raw{\eqcons}\linebreak\raw{\aeqcons}\\
+        Équation de la chaleur & $\eqch$ & \raw{\eqch}\linebreak\raw{\aeqch} \\
+        Équation de diffusion & $\eqdiff{c}$ & \raw{\eqdiff{c}}\linebreak\raw{\aeqdiff{c}} \\
+        Équation de diffusion & $\eqdiff[c]{c}$ & \raw{\eqdiff[c]}\linebreak\raw{\aeqdiff[c]{c}}
+    \end{tabular}}
+\end{adjustbox}
+
+\subsection{Calligraphie}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ll ll ll ll ll ll ll}
+    $\cala$ & \raw{\cala} &&& $\caln$ & \raw{\caln} &&& $\mcala$ & \raw{\mcala} &&& $\mcaln$ & \raw{\mcaln}\\
+    $\calb$ & \raw{\calb} &&& $\calo$ & \raw{\calo} &&& $\mcalb$ & \raw{\mcalb} &&& $\mcalo$ & \raw{\mcalo}\\
+    $\calc$ & \raw{\calc} &&& $\calp$ & \raw{\calp} &&& $\mcalc$ & \raw{\mcalc} &&& $\mcalp$ & \raw{\mcalp}\\
+    $\cald$ & \raw{\cald} &&& $\calq$ & \raw{\calq} &&& $\mcald$ & \raw{\mcald} &&& $\mcalq$ & \raw{\mcalq}\\
+    $\cale$ & \raw{\cale} &&& $\calr$ & \raw{\calr} &&& $\mcale$ & \raw{\mcale} &&& $\mcalr$ & \raw{\mcalr}\\
+    $\calf$ & \raw{\calf} &&& $\cals$ & \raw{\cals} &&& $\mcalf$ & \raw{\mcalf} &&& $\mcals$ & \raw{\mcals}\\
+    $\calg$ & \raw{\calg} &&& $\calt$ & \raw{\calt} &&& $\mcalg$ & \raw{\mcalg} &&& $\mcalt$ & \raw{\mcalt}\\
+    $\calh$ & \raw{\calh} &&& $\calu$ & \raw{\calu} &&& $\mcalh$ & \raw{\mcalh} &&& $\mcalu$ & \raw{\mcalu}\\
+    $\cali$ & \raw{\cali} &&& $\calv$ & \raw{\calv} &&& $\mcali$ & \raw{\mcali} &&& $\mcalv$ & \raw{\mcalv}\\
+    $\calj$ & \raw{\calj} &&& $\calw$ & \raw{\calw} &&& $\mcalj$ & \raw{\mcalj} &&& $\mcalw$ & \raw{\mcalw}\\
+    $\calk$ & \raw{\calk} &&& $\calx$ & \raw{\calx} &&& $\mcalk$ & \raw{\mcalk} &&& $\mcalx$ & \raw{\mcalx}\\
+    $\call$ & \raw{\call} &&& $\caly$ & \raw{\caly} &&& $\mcall$ & \raw{\mcall} &&& $\mcaly$ & \raw{\mcaly}\\
+    $\calm$ & \raw{\calm} &&& $\calz$ & \raw{\calz} &&& $\mcalm$ & \raw{\mcalm} &&& $\mcalz$ & \raw{\mcalz}
+    \end{tabular}
+\end{table}
+
+\subsection{Mécanique quantique}
+
+\subsubsection{Opérateurs et espaces de Hilbert}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ll ll ll ll ll ll ll ll ll}
+        $\hha$ & \raw{\ha} &&& $\hhn$ & \raw{\hn} &&& $\hhA$ & \raw{\hA} &&& $\hhN$ & \raw{\hN} &&& $\hhpx$ & \raw{\hhpx}\\
+        $\hhb$ & \raw{\hb} &&& $\hho$ & \raw{\ho} &&& $\hhB$ & \raw{\hB} &&& $\hhO$ & \raw{\hO} &&& $\hhpy$ & \raw{\hhpy}\\
+        $\hhc$ & \raw{\hc} &&& $\hhp$ & \raw{\hp} &&& $\hhC$ & \raw{\hC} &&& $\hhP$ & \raw{\hP} &&& $\hhpz$ & \raw{\hhpz}\\
+        $\hhd$ & \raw{\hd} &&& $\hhq$ & \raw{\hq} &&& $\hhD$ & \raw{\hD} &&& $\hhQ$ & \raw{\hQ} &&& $\hhSx$ & \raw{\hhSx}\\
+        $\hhe$ & \raw{\he} &&& $\hhr$ & \raw{\hr} &&& $\hhE$ & \raw{\hE} &&& $\hhR$ & \raw{\hR} &&& $\hhSy$ & \raw{\hhSy}\\
+        $\hhf$ & \raw{\hf} &&& $\hhs$ & \raw{\hs} &&& $\hhF$ & \raw{\hF} &&& $\hhS$ & \raw{\hS} &&& $\hhSz$ & \raw{\hhSz}\\
+        $\hhg$ & \raw{\hg} &&& $\hht$ & \raw{\ht} &&& $\hhG$ & \raw{\hG} &&& $\hhT$ & \raw{\hT} &&& $\hsigx$ & \raw{\hsigx}\\
+        $\hhh$ & \raw{\hh} &&& $\hhu$ & \raw{\hu} &&& $\hhH$ & \raw{\hH} &&& $\hhU$ & \raw{\hU} &&& $\hsigy$ & \raw{\hsigy}\\
+        $\hhi$ & \raw{\hi} &&& $\hhv$ & \raw{\hv} &&& $\hhI$ & \raw{\hI} &&& $\hhV$ & \raw{\hV} &&& $\hsigz$ & \raw{\hsigz}\\
+        $\hhj$ & \raw{\hj} &&& $\hhw$ & \raw{\hw} &&& $\hhJ$ & \raw{\hJ} &&& $\hhW$ & \raw{\hW} &&& $\ham$ & \raw{\ham}\\
+        $\hhk$ & \raw{\hk} &&& $\hhx$ & \raw{\hx} &&& $\hhK$ & \raw{\hK} &&& $\hhX$ & \raw{\hX} &&& $\hil$ & \raw{\hil}\\
+        $\hhl$ & \raw{\hl} &&& $\hhy$ & \raw{\hy} &&& $\hhL$ & \raw{\hL} &&& $\hhY$ & \raw{\hY} &&& \\
+        $\hhm$ & \raw{\hm} &&& $\hhz$ & \raw{\hz} &&& $\hhM$ & \raw{\hM} &&& $\hhZ$ & \raw{\hZ} &&&
+    \end{tabular}
+\end{table}
+
+\subsubsection{Matrices de Pauli}
+
+\begin{align*}
+    \raw{\sigx} &= \sigx\\
+    \raw{\sigy} &= \sigy\\
+    \raw{\sigz} &= \sigz\\
+    \raw{\sigmaw} &= \sigmaw\\
+    \raw{\sigmax} &= \sigmax\\
+    \raw{\sigmay} &= \sigmay\\
+    \raw{\sigmaz} &= \sigmaz
+\end{align*}
+
+\clearpage
+\section{Code source}
+
+\subsection{Code source en ligne}
+
+\begin{center}
+    \begin{tabular}{lll}
+        Langage(s) & Résultat & Commande\\
+        \toprule
+        \textbf{Tous} & \code{python}{print("hello world")} & \raw{\code{python}{print("hello world")}}\\
+        \midrule
+        C, C$++$ & \cpp{printf("hello world");} & \raw{\cpp{printf("hello world");}}\\
+        Java & \java{System.out.println("hello world");} & \raw{\java{System.out.println("hello world");}}\\
+        Javascript & \js{console.log("hello world");} & \raw{\js{console.log("hello world");}}\\
+        Python & \py{print("hello world")} & \raw{\py{print("hello world")}}\\
+    \end{tabular}
+\end{center}
+
+\subsection{Code source en bloc}
+
+\subsubsection{Écrire du code directement dans le document \LaTeX}
+
+\begin{minipage}[t]{0.475\linewidth}
+    \begin{minted}{python}
+def factorielle(n):
+    if n == 0:
+        return 1
+    return n * factorielle(n - 1)
+    \end{minted}
+\end{minipage}\hfill\begin{minipage}[t]{0.475\textwidth}
+    \inputminted{latex}{codeblock.tex}
+\end{minipage}
+
+\subsubsection{Inclure le code source d'un autre document}
+
+\begin{minipage}[t]{0.475\linewidth}
+    \inputminted{latex}{codeblock.tex}
+\end{minipage}\hfill\begin{minipage}[t]{0.475\textwidth}
+    \code{latex}{\inputminted{latex}{codeblock.tex}}
+\end{minipage}
+
+\clearpage
+\section{Algorithmes}
+
+\begin{algorithm}[H]
+\Entree{tableau 2D $M$ de taille $n \times n$ à valeurs dans $\qty{0, 1}$}
+\Sortie{indices $(i_0, j_0) \in \llbracket 1, n \rrbracket^2$ du coin inférieur droit et longueur $n_0$ des côtés d'un carré de $0$ de taille maximale dans l'image $M$}
+\Deb{
+$F \gets \text{tableau 2D de taille $n \times n$ rempli de $0$}$\\
+$(i_0, j_0, n_0) \gets (0, 0, 0)$\\
+\PourCh{$i \in \llbracket 1, n \rrbracket$}{
+    \PourCh{$j \in \llbracket 1, n \rrbracket$}{
+        \Si{$M[i, j] = 0$}{
+            $F[i, j] \gets 1 + \min(F[i-1, j], F[i, j-1], F[i-1, j-1])$\\
+            \Si{$F[i, j] > n_0$}{
+                $n_0 \gets F[i, j]$\\
+                $(i_0, j_0) \gets (i, j)$
+            }
+        }
+    }
+}
+\Retour{$(i_0, j_0)$, $n_0$}
+}
+\caption{Algorithme CarréMaximal.}
+\end{algorithm}
+
+\begin{minted}{latex}
+\begin{algorithm}[H]
+\Entree{tableau 2D $M$ de taille $n \times n$ à valeurs dans $\qty{0, 1}$}
+\Sortie{indices $(i_0, j_0) \in \llbracket 1, n \rrbracket^2$ du coin inférieur droit et longueur $n_0$ des côtés d'un carré de $0$ de taille maximale dans l'image $M$}
+\Deb{
+$F \gets \text{tableau 2D de taille $n \times n$ rempli de $0$}$\\
+$(i_0, j_0, n_0) \gets (0, 0, 0)$\\
+\PourCh{$i \in \llbracket 1, n \rrbracket$}{
+    \PourCh{$j \in \llbracket 1, n \rrbracket$}{
+        \Si{$M[i, j] = 0$}{
+            $F[i, j] \gets 1 + \min(F[i-1, j], F[i, j-1], F[i-1, j-1])$\\
+            \Si{$F[i, j] > n_0$}{
+                $n_0 \gets F[i, j]$\\
+                $(i_0, j_0) \gets (i, j)$
+            }
+        }
+    }
+}
+\Retour{$(i_0, j_0)$, $n_0$}
+}
+\caption{Algorithme CarréMaximal.}
+\end{algorithm}
+\end{minted}
+
+\clearpage
+\section{Code source de ce document}
+\inputminted[fontsize=\small]{latex}{enssdm.tex}
+
+\clearpage
+\section{Code source du package \raw{enssdm}}
+\inputminted[fontsize=\small]{latex}{enssdm.sty}
+
+\end{document}

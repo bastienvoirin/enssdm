@@ -1,0 +1,406 @@
+\ProvidesPackage{enssdm}[2021/11/20]
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{mathtools} % plein de macros et environnements utiles
+\RequirePackage{esvect} % flèches customisées pour les vecteurs
+\RequirePackage{esint} % symboles liés aux intégrales
+\RequirePackage{bm} % symboles mathématiques en gras
+\RequirePackage{bbm} % symboles mathématiques en gras
+\RequirePackage{physics} % plein de macros utiles en sciences
+\RequirePackage{siunitx} % écriture des nombres et des unités
+\RequirePackage[version=4]{mhchem} % équations et formules chimiques
+\RequirePackage{float} % positionnement absolu des éléments flottants avec [H]
+\usepackage{caption}
+\usepackage{subcaption}
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\RequirePackage{underscore} % enlève la nécessité d'échapper un _ en mode texte en écrivant \_
+\RequirePackage{xltabular}
+\RequirePackage{adjustbox}
+\RequirePackage{longtable}
+\RequirePackage{nicematrix} % matrices et tableaux avancés
+\RequirePackage{euscript}
+\RequirePackage[colorlinks=true]{hyperref} % liens
+\RequirePackage[explicit]{titlesec}
+\RequirePackage{titletoc}
+\RequirePackage{booktabs} % tableaux plus avancés (\toprule, \midrule, \bottomrule...)
+\RequirePackage{stmaryrd}
+\RequirePackage{mdframed}
+\RequirePackage[linesnumbered,french]{algorithm2e}
+\RequirePackage{cancel}
+\RequirePackage[bottom]{footmisc}
+\RequirePackage{lmodern}
+
+% mathématiques en gras lorsque le texte est en gras
+\DeclareRobustCommand\bfseries{%
+  \not@math@alphabet\bfseries\mathbf
+  \fontseries\bfdefault\selectfont
+  \boldmath
+}
+
+% symboles utilisés dans les listes non numérotées imbriquées
+\RequirePackage{enumitem}
+\setlist[itemize,1]{label={\textbullet}}
+\setlist[itemize,2]{label={\normalfont\bfseries\textendash}}
+\setlist[itemize,3]{label={\textasteriskcentered}}
+\setlist[itemize,4]{label={\textperiodcentered}}
+
+\newif\if@fr \@frfalse
+\newif\if@en \@enfalse
+\newif\if@code \@codefalse
+\newif\if@showframes \@showframesfalse
+
+\DeclareOption{fr}{\@frtrue}
+\DeclareOption{en}{\@entrue}
+\DeclareOption{code}{\@codetrue}
+\DeclareOption{showframes}{\@showframestrue}
+
+\let\oldhat\hat
+\let\oldto\to
+\let\oldmapsto\mapsto
+\DeclareOption{widehat}{\let\hat\widehat}
+\DeclareOption{longto}{\let\to\longrightarrow}
+\DeclareOption{longmapsto}{\let\mapsto\longmapsto}
+
+% supprime l'indentation des paragraphes
+\DeclareOption{noindent}{\setlength{\parindent}{0pt}}
+
+\DeclareOption*{} % ne rien faire quand une option est inconnue
+\ProcessOptions
+
+\if@fr
+    \RequirePackage[french]{babel}
+    \renewcommand{\vec}[1]{\vv{#1}} % flèches sur les vecteurs
+    \newcommand{\vprod}{\wedge} % produit vectoriel "fr"
+\fi
+
+\if@en
+    \RequirePackage[english]{babel}
+    \renewcommand{\vec}[1]{\bm{#1}} % vecteurs en gras
+    \newcommand{\vprod}{\cross} % produit vectoriel "en"
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\if@code
+    \RequirePackage{minted}
+    \setminted{mathescape=true,linenos,breaklines}
+    \let\code\mintinline
+    \newmintinline[cpp]{c++}{}
+    \newmintinline[java]{java}{}
+    \newmintinline[js]{javascript}{}
+    \newmintinline[py]{python}{}
+    \newmintinline[raw]{latex}{}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\condframe}[1]{#1}
+
+\if@showframes
+    \renewcommand{\condframe}[1]{{\setlength{\fboxsep}{0pt}\fbox{#1}}}
+\fi
+
+\newcommand{\twocol}[3][t]{\medskip
+\condframe{\begin{minipage}{\linewidth}
+\condframe{\begin{minipage}[#1][][#1]{0.475\linewidth}
+    #2
+\end{minipage}}\hfill\condframe{\begin{minipage}[#1][][#1]{0.475\textwidth}
+    #3
+\end{minipage}}
+\end{minipage}}
+\medskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\ssection}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}}
+\newcommand{\ssubsection}[1]{\subsection*{#1}\addcontentsline{toc}{subsection}{#1}}
+\newcommand{\ssubsubsection}[1]{\subsubsection*{#1}\addcontentsline{toc}{subsubsection}{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% macros utiles en général
+
+\newcommand{\red}[1]{{\color{red}#1}}
+\newcommand{\green}[1]{{\color{green!50!black}#1}}
+\newcommand{\blue}[1]{{\color{blue}#1}}
+
+% définition d'une fonction $f$ :
+% $f \funcdef{\text{espace de départ}}{\text{espace d'arrivée}}{\text{élément de départ}}{\text{élément d'arrivée}}$
+\newcommand{\funcdef}[4]{:\;\adjustbox{valign=t}{$\begin{array}{ccc}
+    #1 & \to & #2\\
+    #3 & \mapsto & #4
+\end{array}$}}
+
+\newcommand{\placeholder}{{\setlength{\fboxsep}{0pt}\fbox{\vphantom{|}\;\,\;}}}
+\newcommand{\mub}{\mu_\mathrm{B}} % magnéton de Bohr
+\newcommand{\muz}{\mu_0} % perméabilité du vide
+\newcommand{\epz}{\varepsilon_0} % permittivité du vide
+\newcommand{\na}{N_{\mathrm{A}}} % constante d'Avogadro
+\newcommand{\kb}{k_\mathrm{B}} % constante de Boltzmann
+\newcommand{\kbt}{\kb T}
+\newcommand{\ok}{\SI{0}{\kelvin}} % zéro absolu
+\newcommand{\fermi}{_\mathrm{F}} % "de Fermi"
+\newcommand{\e}[1]{\mathrm{e}^{#1}} % exponentielle
+\newcommand{\eiwt}{\e{i\omega t}}
+\newcommand{\emiwt}{\e{-i\omega t}}
+\newcommand{\E}[1][r]{\vv{E}\qty(\vv#1, t)} % champ électrique
+\newcommand{\B}[1][r]{\vv{B}\qty(\vv#1, t)} % champ magnétique
+\DeclareMathOperator{\grd}{\vv{\text{grad}}} % gradient
+\let\div\relax
+\DeclareMathOperator{\div}{div} % divergence
+\DeclareMathOperator{\rot}{\vv{\text{rot}}} % rotationnel
+\DeclareMathOperator{\crl}{\vv{\text{curl}}} % rotationnel (en anglais)
+\renewcommand{\grad}{\vv{\nabla}} % gradient (avec nabla)
+\newcommand{\divg}{\vv{\nabla}\cdot} % divergence (avec nabla)
+\newcommand{\rota}{\vv{\nabla}\vprod} % rotationnel (avec nabla)
+\newcommand{\algn}[1]{\begin{aligned}#1\end{aligned}}
+\newcommand{\algnt}[1]{\begin{aligned}[t]#1\end{aligned}}
+\newcommand{\syst}[1]{\left\{\;\algn{#1}\right.} % système d'équations ou inégalités
+
+\DeclareMathOperator{\vect}{vect}
+\DeclareMathOperator{\Vect}{Vect}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\Spn}{Span}
+\DeclareMathOperator{\spc}{sp}
+\DeclareMathOperator{\Spc}{Sp}
+\DeclareMathOperator{\kr}{ker}
+\DeclareMathOperator{\Kr}{ker}
+\DeclareMathOperator{\img}{im}
+\DeclareMathOperator{\Img}{Im}
+\DeclareMathOperator{\mat}{mat}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\rg}{rg}
+\DeclareMathOperator{\Rg}{Rg}
+\DeclareMathOperator{\rk}{rk}
+\DeclareMathOperator{\Rk}{Rk}
+\DeclareMathOperator{\per}{per}
+\DeclareMathOperator{\Per}{Per}
+\DeclareMathOperator{\perm}{perm}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Sgn}{Sgn}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Sign}{Sign}
+\DeclareMathOperator{\argmin}{argmin}
+\DeclareMathOperator{\Argmin}{Argmin}
+\DeclareMathOperator{\argmax}{argmax}
+\DeclareMathOperator{\Argmax}{Argmax}
+
+\DeclareMathOperator{\ident}{\mathrm{id}}
+\DeclareMathOperator{\Ident}{\mathrm{Id}}
+\renewcommand{\mid}{\;\middle|\;} % séparateur dans les ensembles
+\newcommand{\1}[1][]{\mathbbm{1}_{#1}} % identité
+\newcommand{\id}[1][]{\mathrm{id}_{#1}} % identité
+\newcommand{\Id}[1][]{\mathrm{Id}_{#1}} % identité
+\newcommand{\set}[1]{\ensuremath\left\{\, #1 \,\right\}} % ensemble simple
+\newcommand{\sset}[2]{\ensuremath\left\{\; #1 \mid #2 \right\}} % ensemble avec une partie "tel que"
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% mécanique quantique
+
+\newcommand{\hil}{\ensuremath\mathcal{H}} % espace de Hilbert
+\newcommand{\ham}{\ensuremath\hat{H}} % hamiltonien
+
+\newcommand{\hha}{\ensuremath\hat{a}}
+\newcommand{\hhb}{\ensuremath\hat{b}}
+\newcommand{\hhc}{\ensuremath\hat{c}}
+\newcommand{\hhd}{\ensuremath\hat{d}}
+\newcommand{\hhe}{\ensuremath\hat{e}}
+\newcommand{\hhf}{\ensuremath\hat{f}}
+\newcommand{\hhg}{\ensuremath\hat{g}}
+\newcommand{\hhh}{\ensuremath\hat{h}}
+\newcommand{\hhi}{\ensuremath\hat{i}}
+\newcommand{\hhj}{\ensuremath\hat{j}}
+\newcommand{\hhk}{\ensuremath\hat{k}}
+\newcommand{\hhl}{\ensuremath\hat{l}}
+\newcommand{\hhm}{\ensuremath\hat{m}}
+\newcommand{\hhn}{\ensuremath\hat{n}}
+\newcommand{\hho}{\ensuremath\hat{o}}
+\newcommand{\hhp}{\ensuremath\hat{p}}
+\newcommand{\hhq}{\ensuremath\hat{q}}
+\newcommand{\hhr}{\ensuremath\hat{r}}
+\newcommand{\hhs}{\ensuremath\hat{s}}
+\newcommand{\hht}{\ensuremath\hat{t}}
+\newcommand{\hhu}{\ensuremath\hat{u}}
+\newcommand{\hhv}{\ensuremath\hat{v}}
+\newcommand{\hhw}{\ensuremath\hat{w}}
+\newcommand{\hhx}{\ensuremath\hat{x}}
+\newcommand{\hhy}{\ensuremath\hat{y}}
+\newcommand{\hhz}{\ensuremath\hat{z}}
+\newcommand{\hhA}{\ensuremath\hat{A}}
+\newcommand{\hhB}{\ensuremath\hat{B}}
+\newcommand{\hhC}{\ensuremath\hat{C}}
+\newcommand{\hhD}{\ensuremath\hat{D}}
+\newcommand{\hhE}{\ensuremath\hat{E}}
+\newcommand{\hhF}{\ensuremath\hat{F}}
+\newcommand{\hhG}{\ensuremath\hat{G}}
+\newcommand{\hhH}{\ensuremath\hat{H}}
+\newcommand{\hhI}{\ensuremath\hat{I}}
+\newcommand{\hhJ}{\ensuremath\hat{J}}
+\newcommand{\hhK}{\ensuremath\hat{K}}
+\newcommand{\hhL}{\ensuremath\hat{L}}
+\newcommand{\hhM}{\ensuremath\hat{M}}
+\newcommand{\hhN}{\ensuremath\hat{N}}
+\newcommand{\hhO}{\ensuremath\hat{O}}
+\newcommand{\hhP}{\ensuremath\hat{P}}
+\newcommand{\hhQ}{\ensuremath\hat{Q}}
+\newcommand{\hhR}{\ensuremath\hat{R}}
+\newcommand{\hhS}{\ensuremath\hat{S}}
+\newcommand{\hhT}{\ensuremath\hat{T}}
+\newcommand{\hhU}{\ensuremath\hat{U}}
+\newcommand{\hhV}{\ensuremath\hat{V}}
+\newcommand{\hhW}{\ensuremath\hat{W}}
+\newcommand{\hhX}{\ensuremath\hat{X}}
+\newcommand{\hhY}{\ensuremath\hat{Y}}
+\newcommand{\hhZ}{\ensuremath\hat{Z}}
+
+\let\cal\EuScript
+\newcommand{\cala}{\ensuremath\cal{A}}
+\newcommand{\calb}{\ensuremath\cal{B}}
+\newcommand{\calc}{\ensuremath\cal{C}}
+\newcommand{\cald}{\ensuremath\cal{D}}
+\newcommand{\cale}{\ensuremath\cal{E}}
+\newcommand{\calf}{\ensuremath\cal{F}}
+\newcommand{\calg}{\ensuremath\cal{G}}
+\newcommand{\calh}{\ensuremath\cal{H}}
+\newcommand{\cali}{\ensuremath\cal{I}}
+\newcommand{\calj}{\ensuremath\cal{J}}
+\newcommand{\calk}{\ensuremath\cal{K}}
+\newcommand{\call}{\ensuremath\cal{L}}
+\newcommand{\calm}{\ensuremath\cal{M}}
+\newcommand{\caln}{\ensuremath\cal{N}}
+\newcommand{\calo}{\ensuremath\cal{O}}
+\newcommand{\calp}{\ensuremath\cal{P}}
+\newcommand{\calq}{\ensuremath\cal{Q}}
+\newcommand{\calr}{\ensuremath\cal{R}}
+\newcommand{\cals}{\ensuremath\cal{S}}
+\newcommand{\calt}{\ensuremath\cal{T}}
+\newcommand{\calu}{\ensuremath\cal{U}}
+\newcommand{\calv}{\ensuremath\cal{V}}
+\newcommand{\calw}{\ensuremath\cal{W}}
+\newcommand{\calx}{\ensuremath\cal{X}}
+\newcommand{\caly}{\ensuremath\cal{Y}}
+\newcommand{\calz}{\ensuremath\cal{Z}}
+
+\let\mcal\mathcal
+\newcommand{\mcala}{\ensuremath\mcal{A}}
+\newcommand{\mcalb}{\ensuremath\mcal{B}}
+\newcommand{\mcalc}{\ensuremath\mcal{C}}
+\newcommand{\mcald}{\ensuremath\mcal{D}}
+\newcommand{\mcale}{\ensuremath\mcal{E}}
+\newcommand{\mcalf}{\ensuremath\mcal{F}}
+\newcommand{\mcalg}{\ensuremath\mcal{G}}
+\newcommand{\mcalh}{\ensuremath\mcal{H}}
+\newcommand{\mcali}{\ensuremath\mcal{I}}
+\newcommand{\mcalj}{\ensuremath\mcal{J}}
+\newcommand{\mcalk}{\ensuremath\mcal{K}}
+\newcommand{\mcall}{\ensuremath\mcal{L}}
+\newcommand{\mcalm}{\ensuremath\mcal{M}}
+\newcommand{\mcaln}{\ensuremath\mcal{N}}
+\newcommand{\mcalo}{\ensuremath\mcal{O}}
+\newcommand{\mcalp}{\ensuremath\mcal{P}}
+\newcommand{\mcalq}{\ensuremath\mcal{Q}}
+\newcommand{\mcalr}{\ensuremath\mcal{R}}
+\newcommand{\mcals}{\ensuremath\mcal{S}}
+\newcommand{\mcalt}{\ensuremath\mcal{T}}
+\newcommand{\mcalu}{\ensuremath\mcal{U}}
+\newcommand{\mcalv}{\ensuremath\mcal{V}}
+\newcommand{\mcalw}{\ensuremath\mcal{W}}
+\newcommand{\mcalx}{\ensuremath\mcal{X}}
+\newcommand{\mcaly}{\ensuremath\mcal{Y}}
+\newcommand{\mcalz}{\ensuremath\mcal{Z}}
+
+\newcommand{\hhpx}{\ensuremath\hat{p}_x}
+\newcommand{\hhpy}{\ensuremath\hat{p}_y}
+\newcommand{\hhpz}{\ensuremath\hat{p}_z}
+\newcommand{\hhSx}{\ensuremath\hat{S}_x}
+\newcommand{\hhSy}{\ensuremath\hat{S}_y}
+\newcommand{\hhSz}{\ensuremath\hat{S}_z}
+\newcommand{\hsigx}{\ensuremath\hat{\sigma}_x}
+\newcommand{\hsigy}{\ensuremath\hat{\sigma}_y}
+\newcommand{\hsigz}{\ensuremath\hat{\sigma}_z}
+\newcommand{\sigx}{\ensuremath\sigma_x}
+\newcommand{\sigy}{\ensuremath\sigma_y}
+\newcommand{\sigz}{\ensuremath\sigma_z}
+
+\newcommand{\sigmaw}{\mqty(1&0\\0&1)} % sigma_0 = Id
+\newcommand{\sigmax}{\mqty(0&1\\1&0)} % sigma_1 = sigma_x
+\newcommand{\sigmay}{\mqty(0&-i\\i&0)} % sigma_2 = sigma_y
+\newcommand{\sigmaz}{\mqty(1&0\\0&-1)} % sigma_3 = sigma_z
+
+\newcommand{\C}{\ensuremath\mathbb{C}} % nombres complexes
+\newcommand{\N}{\ensuremath\mathbb{N}} % entiers naturels
+\newcommand{\Q}{\ensuremath\mathbb{Q}} % nombres rationnels
+\newcommand{\R}{\ensuremath\mathbb{R}} % nombres réels
+\newcommand{\Z}{\ensuremath\mathbb{Z}} % entiers relatifs
+
+\newcommand{\matn}[2][\R]{\cal{M}_{#2\times#2}(#1)} % M_{#2 x #2}(#1) avec #1 = \R par défaut
+\newcommand{\matnm}[3][\R]{\cal{M}_{#2\times#3}(#1)} % M_{#2 x #3}(#1) avec #1 = \R par défaut
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tenseurs et géométrie
+
+\newcommand{\qv}[1]{\underline{#1}} % quadrivecteur
+\newcommand{\ts}[3]{{{#1}^{#2}}_{#3}} % tenseur
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% équations
+
+\newcommand{\eqma}{\displaystyle{\rota\vv{B} = \muz\vv{j} + \frac{1}{c^2}\,\pdv{\vv{E}}{t}}}
+\newcommand{\eqmf}{\displaystyle{\rota\vv{E} = -\pdv{\vv{B}}{t}}}
+\newcommand{\eqmg}{\displaystyle{\divg\vv{E} = \frac{\rho}{\epz}}}
+\newcommand{\eqmt}{\displaystyle{\divg\vv{B} = 0}}
+
+\newcommand{\aeqma}{\displaystyle{\rota\vv{B} &= \muz\vv{j} + \frac{1}{c^2}\,\pdv{\vv{E}}{t}}}
+\newcommand{\aeqmf}{\displaystyle{\rota\vv{E} &= -\pdv{\vv{B}}{t}}}
+\newcommand{\aeqmg}{\displaystyle{\divg\vv{E} &= \frac{\rho}{\epz}}}
+\newcommand{\aeqmt}{\displaystyle{\divg\vv{B} &= 0}}
+
+\newcommand{\eqmai}{\displaystyle{\oint_C \vv{B}\cdot\dd{\vv{\ell}} = \muz I_\text{enlacé} + \frac{1}{c^2}\iint_S\pdv{\vv{E}}{t}\cdot\dd{\vv{S}}}}
+\newcommand{\eqmfi}{\displaystyle{\oint_C \vv{E}\cdot\dd{\vv{\ell}} = -\dv{\Phi_{\vv{B}}}{t}}}
+\newcommand{\eqmgi}{\displaystyle{\oiint_\Sigma \vv{E}\cdot\dd{\vv{S}} = \frac{Q_{\text{int}}}{\epz}}}
+\newcommand{\eqmti}{\displaystyle{\oiint_\Sigma \vv{B}\cdot\dd{\vv{S}} = 0}}
+
+\newcommand{\defpoy}{\displaystyle{\vv{\Pi} = \frac{\vv{E}\vprod\vv{B}}{\muz}}}
+\newcommand{\thmpoy}{\displaystyle{\pdv{u}{t} + \divg\vv{\Pi} = 0}}
+\newcommand{\eqcons}{\displaystyle{\pdv{\rho}{t} + \divg\vv{j} = 0}}
+
+\newcommand{\adefpoy}{\displaystyle{\vv{\Pi} &= \frac{\vv{E}\vprod\vv{B}}{\muz}}}
+\newcommand{\athmpoy}{\displaystyle{\pdv{u}{t} + \divg\vv{\Pi} &= 0}}
+\newcommand{\aeqcons}{\displaystyle{\pdv{\rho}{t} + \divg\vv{j} &= 0}}
+
+\newcommand{\eqch}{\displaystyle{\pdv{T}{t} = \kappa\nabla^2T}}
+\newcommand{\eqdiff}[2][]{\displaystyle{\pdv{#2}{t} = \cald_{#1}\nabla^2#2}}
+
+\newcommand{\aeqch}{\displaystyle{\pdv{T}{t} &= \kappa\nabla^2T}}
+\newcommand{\aeqdiff}[2][T]{\displaystyle{\pdv{#1}{t} &= \cald_{#2}\nabla^2#1}}
+
+\newcommand{\lag}{\mathcal{L}}
+\newcommand{\eqeula}[1][x]{\displaystyle{\pdv{\lag}{#1} - \dv{t}\qty(\pdv{\lag}{\dot#1}) = 0}}
+\newcommand{\aeqeula}[1][x]{\displaystyle{\pdv{\lag}{#1} - \dv{t}\qty(\pdv{\lag}{\dot#1}) &= 0}}
+
+\newcommand{\eqschr}[1][\psi(t)]{\displaystyle{i\hbar\,\dv{t}\ket{#1} = \ham\ket{#1}}}
+\newcommand{\eqschrind}[2][]{\displaystyle{\ham\ket{#2_{#1}} = E\ket{#2_{#1}}}}
+
+\newcommand{\aeqschr}[1][\psi(t)]{\displaystyle{i\hbar\,\dv{t}\ket{#1} &= \ham\ket{#1}}}
+\newcommand{\aeqschrind}[2][]{\displaystyle{\ham\ket{#2_{#1}} &= E\ket{#2_{#1}}}}
+
+\newcommand{\exprtf}[1][f]{\displaystyle{\int_{-\infty}^{+\infty} #1(t)\,\e{-2\pi ft}\dd{t}}}
+\newcommand{\exprtfi}[1][\hat{f}]{\displaystyle{\frac{1}{2\pi}\int_{-\infty}^{+\infty} #1(f)\,\e{2\pi ft}\dd{f}}}
+\newcommand{\exprtu}[1][f]{\displaystyle{\int_{-\infty}^{+\infty} #1(t)\,\e{-2\pi\nu t}\dd{t}}}
+\newcommand{\exprtui}[1][\hat{f}]{\displaystyle{\frac{1}{2\pi}\int_{-\infty}^{+\infty} #1(f)\,\e{2\pi\nu t}\dd{\nu}}}
+\newcommand{\exprtw}[1][f]{\displaystyle{\int_{-\infty}^{+\infty} #1(t)\,\emiwt\dd{t}}}
+\newcommand{\exprtwi}[1][\hat{f}]{\displaystyle{\frac{1}{2\pi}\int_{-\infty}^{+\infty} #1(f)\,\eiwt\dd{\omega}}}
+
+\newcommand{\minkp}{{\mqty(1&0&0&0 \\ 0&-1&0&0 \\ 0&0&-1&0 \\ 0&0&0&-1)}}
+\newcommand{\minkn}{{{\mqty(-1&0&0&0 \\ 0&1&0&0 \\ 0&0&1&0 \\ 0&0&0&1)}}}
+\newcommand{\lorentzx}{{\mqty(\cosh\omega&-\sinh\omega&0&0 \\ -\sinh\omega&\cosh\omega&0&0 \\ 0&0&1&0 \\ 0&0&0&1)}}
+\newcommand{\lorentzy}{{\mqty(\cosh\omega&0&-\sinh\omega&0 \\ 0&1&0&0 \\ -\sinh\omega&0&\cosh\omega&0 \\ 0&0&0&1)}}
+\newcommand{\lorentzz}{{\mqty(\cosh\omega&0&0&-\sinh\omega \\ 0&1&0&0 \\ 0&0&1&0 \\ -\sinh\omega&0&0&\cosh\omega)}}
+\newcommand{\lorentzr}{{\mqty(1&0&0&0 \\ 0&R_{11}&R_{12}&R_{13} \\ 0&R_{21}&R_{22}&R_{23} \\ 0&R_{31}&R_{32}&R_{33})}}
+\endinput
